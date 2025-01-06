@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { DUMMY_USERS } from '../../../dummy-users';
 import { getRandomIndex } from '../../../helpers/getRandomIndex';
 import User from '../../../types/interfaces';
@@ -10,9 +10,10 @@ import User from '../../../types/interfaces';
   styleUrl: './user.component.css',
 })
 export class UserComponent {
-  public selectedUser: User = DUMMY_USERS[getRandomIndex(DUMMY_USERS)];
+  @Input({ required: true }) avatar!: string;
+  @Input({ required: true }) name!: string;
 
   public get imagePath(): string {
-    return 'assets/users/' + this.selectedUser.avatar;
+    return '/assets/users/' + this.avatar;
   }
 }
