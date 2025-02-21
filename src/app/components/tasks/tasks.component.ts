@@ -1,5 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { TaskComponent } from './task/task.component';
+import { ITask } from './task/task.model';
+import { IUser } from '../user/user.model';
 
 @Component({
   selector: 'app-tasks',
@@ -8,9 +10,9 @@ import { TaskComponent } from './task/task.component';
   styleUrl: './tasks.component.css',
 })
 export class TasksComponent {
-  @Input({ required: true }) public name!: string;
+  @Input({ required: true }) public user!: IUser;
 
-  tasks = [
+  public tasks: ITask[] = [
     {
       id: 't1',
       userId: 'u1',
@@ -35,4 +37,8 @@ export class TasksComponent {
       dueDate: '2024-06-15',
     },
   ];
+
+  public get selectedTasks(): ITask[] {
+    return this.tasks.filter((task) => task.userId === this.user.id);
+  }
 }

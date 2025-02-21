@@ -4,7 +4,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { UserComponent } from './components/user/user.component';
 import { TasksComponent } from './components/tasks/tasks.component';
 import { DUMMY_USERS } from '../dummy-users';
-import User from '../types/interfaces';
+import { IUser } from './components/user/user.model';
 
 @Component({
   selector: 'app-root',
@@ -17,7 +17,7 @@ export class AppComponent {
   public users = DUMMY_USERS;
   private selectedUserId?: string;
 
-  get selectedUser(): User {
+  get selectedUser(): IUser {
     return this.users.find((user) => user.id === this.selectedUserId)!;
   }
 

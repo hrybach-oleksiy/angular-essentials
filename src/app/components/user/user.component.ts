@@ -1,7 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { DUMMY_USERS } from '../../../dummy-users';
-import { getRandomIndex } from '../../../helpers/getRandomIndex';
-import User from '../../../types/interfaces';
+import { IUser } from './user.model';
 
 @Component({
   selector: 'app-user',
@@ -10,7 +8,7 @@ import User from '../../../types/interfaces';
   styleUrl: './user.component.css',
 })
 export class UserComponent {
-  @Input({ required: true }) public user!: User;
+  @Input({ required: true }) public user!: IUser;
   @Output() public select = new EventEmitter<string>();
 
   public get imagePath(): string {
