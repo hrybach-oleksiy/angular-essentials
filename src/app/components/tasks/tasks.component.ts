@@ -1,16 +1,18 @@
 import { Component, Input } from '@angular/core';
 import { TaskComponent } from './task/task.component';
-import { ITask } from './task/task.model';
+import { INewTaskData, ITask } from './task/task.model';
 import { IUser } from '../user/user.model';
+import { NewTaskComponent } from './new-task/new-task.component';
 
 @Component({
   selector: 'app-tasks',
-  imports: [TaskComponent],
+  imports: [TaskComponent, NewTaskComponent],
   templateUrl: './tasks.component.html',
   styleUrl: './tasks.component.css',
 })
 export class TasksComponent {
   @Input({ required: true }) public user!: IUser;
+  public isAddingTask = false;
 
   public tasks: ITask[] = [
     {
@@ -44,5 +46,25 @@ export class TasksComponent {
 
   public onTaskComplete(taskId: string): void {
     this.tasks = this.tasks.filter((task) => task.id !== taskId);
+  }
+
+  public onStartAddTask(): void {
+    this.isAddingTask = true;
+  }
+
+  public onCancelAddTask(): void {
+    this.isAddingTask = false;
+  }
+
+  public onAddTask(taskData: INewTaskData): void {
+    this.tasks.push({
+      id: new Date().getTime().toString(),
+      userId: this.user.id,
+      title: taskData.title,
+      summary: taskData.summary,
+      dueDate: taskData.date,
+    });
+
+    this.isAddingTask = false;
   }
 }
