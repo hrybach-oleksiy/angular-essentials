@@ -15,7 +15,7 @@ import User from '../types/interfaces';
 export class AppComponent {
   title = 'udemy-todo';
   public users = DUMMY_USERS;
-  private selectedUserId: string = 'u1';
+  private selectedUserId?: string;
 
   get selectedUser(): User {
     return this.users.find((user) => user.id === this.selectedUserId)!;
