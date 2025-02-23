@@ -16,12 +16,8 @@ export class TasksComponent {
   private taskService = inject(TasksService);
   public isAddingTask = false;
 
-  public get selectedTasks() {
+  public get selectedUserTasks() {
     return this.taskService.getUserTasks(this.user.id);
-  }
-
-  public onTaskComplete(taskId: string): void {
-    this.taskService.removeTask(taskId);
   }
 
   public onStartAddTask(): void {
