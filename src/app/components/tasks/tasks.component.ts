@@ -1,7 +1,8 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
+import { TasksService } from './tasks.service';
+
 import { TaskComponent } from './task/task.component';
-import { INewTaskData, ITask } from './task/task.model';
-import { IUser } from '../user/user.model';
+import { type IUser } from '../user/user.model';
 import { NewTaskComponent } from './new-task/new-task.component';
 
 @Component({
@@ -12,59 +13,22 @@ import { NewTaskComponent } from './new-task/new-task.component';
 })
 export class TasksComponent {
   @Input({ required: true }) public user!: IUser;
+  private taskService = inject(TasksService);
   public isAddingTask = false;
 
-  public tasks: ITask[] = [
-    {
-      id: 't1',
-      userId: 'u1',
-      title: 'Master Angular',
-      summary:
-        'Learn all the basic and advanced features of Angular & how to apply them.',
-      dueDate: '2025-12-31',
-    },
-    {
-      id: 't2',
-      userId: 'u3',
-      title: 'Build first prototype',
-      summary: 'Build a first prototype of the online shop website',
-      dueDate: '2024-05-31',
-    },
-    {
-      id: 't3',
-      userId: 'u3',
-      title: 'Prepare issue template',
-      summary:
-        'Prepare and describe an issue template which will help with project management',
-      dueDate: '2024-06-15',
-    },
-  ];
-
-  public get selectedTasks(): ITask[] {
-    return this.tasks.filter((task) => task.userId === this.user.id);
+  public get selectedTasks() {
+    return this.taskService.getUserTasks(this.user.id);
   }
 
   public onTaskComplete(taskId: string): void {
-    this.tasks = this.tasks.filter((task) => task.id !== taskId);
+    this.taskService.removeTask(taskId);
   }
 
   public onStartAddTask(): void {
     this.isAddingTask = true;
   }
 
-  public onCancelAddTask(): void {
-    this.isAddingTask = false;
-  }
-
-  public onAddTask(taskData: INewTaskData): void {
-    this.tasks.push({
-      id: new Date().getTime().toString(),
-      userId: this.user.id,
-      title: taskData.title,
-      summary: taskData.summary,
-      dueDate: taskData.date,
-    });
-
+  public onCloseAddTask(): void {
     this.isAddingTask = false;
   }
 }
