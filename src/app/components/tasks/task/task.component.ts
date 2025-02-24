@@ -1,10 +1,10 @@
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { ITask } from './task.model';
 import { TasksService } from '../tasks.service';
 
 @Component({
   selector: 'app-task',
-  imports: [],
+  standalone: false,
   templateUrl: './task.component.html',
   styleUrl: './task.component.css',
 })
