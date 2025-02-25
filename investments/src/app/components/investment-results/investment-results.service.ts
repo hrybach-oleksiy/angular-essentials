@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal, WritableSignal } from '@angular/core';
 
 import type { IAnnualData, IInvestmentInput } from './investment-results.model';
 
@@ -6,12 +6,14 @@ import type { IAnnualData, IInvestmentInput } from './investment-results.model';
   providedIn: 'root',
 })
 export class InvestmentResultsService {
-  public annualData: IAnnualData[] = [];
+  public annualData: WritableSignal<IAnnualData[]> = signal<IAnnualData[]>([]);
 
   constructor() {}
 
   public calculateInvestmentResults(userInput: IInvestmentInput): void {
     let investmentValue = userInput.initialInvestment;
+
+    this.annualData.set([]);
 
     for (let i = 0; i < userInput.duration; i++) {
       const year = i + 1;
@@ -23,7 +25,7 @@ export class InvestmentResultsService {
         userInput.annualInvestment * year -
         userInput.initialInvestment;
 
-      this.annualData.push({
+      const newData: IAnnualData = {
         year: year,
         interest: interestEarnedInYear,
         valueEndOfYear: investmentValue,
@@ -31,7 +33,9 @@ export class InvestmentResultsService {
         totalInterest: totalInterest,
         totalAmountInvested:
           userInput.initialInvestment + userInput.annualInvestment * year,
-      });
+      };
+
+      this.annualData.set([...this.annualData(), newData]);
     }
   }
 }

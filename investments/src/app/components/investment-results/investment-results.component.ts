@@ -12,11 +12,9 @@ import { IAnnualData } from './investment-results.model';
   styleUrl: './investment-results.component.css',
 })
 export class InvestmentResultsComponent {
-  // public annualData: IAnnualData[] = [];
-
   private investmentResultsService = inject(InvestmentResultsService);
 
   get results(): IAnnualData[] {
-    return this.investmentResultsService.annualData;
+    return this.investmentResultsService.annualData();
   }
 }
