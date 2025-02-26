@@ -14,7 +14,7 @@ import { IAnnualData } from './investment-results.model';
 export class InvestmentResultsComponent {
   private investmentResultsService = inject(InvestmentResultsService);
 
-  get results(): IAnnualData[] {
-    return this.investmentResultsService.annualData();
+  get results(): IAnnualData[] | undefined {
+    return this.investmentResultsService.resultData;
   }
 }

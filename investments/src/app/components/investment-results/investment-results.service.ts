@@ -1,4 +1,4 @@
-import { Injectable, signal, WritableSignal } from '@angular/core';
+import { Injectable } from '@angular/core';
 
 import type { IAnnualData, IInvestmentInput } from './investment-results.model';
 
@@ -6,36 +6,33 @@ import type { IAnnualData, IInvestmentInput } from './investment-results.model';
   providedIn: 'root',
 })
 export class InvestmentResultsService {
-  public annualData: WritableSignal<IAnnualData[]> = signal<IAnnualData[]>([]);
+  public resultData?: IAnnualData[];
 
   constructor() {}
 
   public calculateInvestmentResults(userInput: IInvestmentInput): void {
-    let investmentValue = userInput.initialInvestment;
+    const { initialInvestment, annualInvestment, expectedReturn, duration } =
+      userInput;
+    const annualData = [];
+    let investmentValue = initialInvestment;
 
-    this.annualData.set([]);
-
-    for (let i = 0; i < userInput.duration; i++) {
+    for (let i = 0; i < duration; i++) {
       const year = i + 1;
-      const interestEarnedInYear =
-        investmentValue * (userInput.expectedReturn / 100);
-      investmentValue += interestEarnedInYear + userInput.annualInvestment;
+      const interestEarnedInYear = investmentValue * (expectedReturn / 100);
+      investmentValue += interestEarnedInYear + annualInvestment;
       const totalInterest =
-        investmentValue -
-        userInput.annualInvestment * year -
-        userInput.initialInvestment;
+        investmentValue - annualInvestment * year - initialInvestment;
 
-      const newData: IAnnualData = {
+      annualData.push({
         year: year,
         interest: interestEarnedInYear,
         valueEndOfYear: investmentValue,
-        annualInvestment: userInput.annualInvestment,
+        annualInvestment: annualInvestment,
         totalInterest: totalInterest,
-        totalAmountInvested:
-          userInput.initialInvestment + userInput.annualInvestment * year,
-      };
+        totalAmountInvested: initialInvestment + annualInvestment * year,
+      });
 
-      this.annualData.set([...this.annualData(), newData]);
+      this.resultData = annualData;
     }
   }
 }
